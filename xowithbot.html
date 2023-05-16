@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 2px;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            margin-top: 10%;
+        }
+
+        .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        .cell:hover {
+            background-color: #ddd;
+        }
+        .reset-button {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #ccc;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="board">
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+    </div>
+
+    <div class="reset-button" onclick="resetBoard()">Reset Board</div>
+
+    <script>
+        function resetBoard() {
+            cells.forEach(cell => {
+                cell.textContent = '';
+            });
+
+            currentPlayer = 'X';
+            gameEnded = false;
+        }
+        const cells = document.querySelectorAll('.cell');
+        const boardSize = 5; // Adjust the board size here
+        const winCondition = 4; // Adjust the required number of connected symbols to win
+        let currentPlayer = 'X';
+        let gameEnded = false;
+    
+        cells.forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
+    
+        function handleCellClick() {
+            if (gameEnded || this.textContent !== '') return;
+    
+            this.textContent = currentPlayer;
+    
+            if (checkWinCondition(currentPlayer)) {
+                alert(`Player ${currentPlayer} wins!`);
+                gameEnded = true;
+            } else if (checkDrawCondition()) {
+                alert("It's a draw!");
+                gameEnded = true;
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            if (currentPlayer === 'O' && !gameEnded) {
+                makeBotMove();
+            }
+        }
+    
+        function checkWinCondition(player) {
+            const rows = getRows();
+            const columns = getColumns();
+            const diagonals = getDiagonals();
+    
+            return rows.some(row => containsConnectedSymbols(row, player)) ||
+                columns.some(column => containsConnectedSymbols(column, player)) ||
+                diagonals.some(diagonal => containsConnectedSymbols(diagonal, player));
+        }
+    
+        function containsConnectedSymbols(line, player) {
+            let count = 0;
+    
+            for (let i = 0; i < line.length; i++) {
+                if (line[i].textContent === player) {
+                    count++;
+    
+                    if (count === winCondition) {
+                        return true;
+                    }
+                } else {
+                    count = 0;
+                }
+            }
+    
+            return false;
+        }
+    
+        function getRows() {
+            const rows = [];
+    
+            for (let i = 0; i < cells.length; i += boardSize) {
+                rows.push(Array.from(cells).slice(i, i + boardSize));
+            }
+    
+            return rows;
+        }
+    
+        function getColumns() {
+            const columns = [];
+    
+            for (let i = 0; i < boardSize; i++) {
+                const column = [];
+    
+                for (let j = i; j < cells.length; j += boardSize) {
+                    column.push(cells[j]);
+                }
+    
+                columns.push(column);
+            }
+    
+            return columns;
+        }
+    
+        function getDiagonals() {
+            const diagonals = [];
+            const topLeftToBottomRight = [];
+            const topRightToBottomLeft = [];
+    
+            for (let i = 0; i < cells.length; i += boardSize + 1) {
+                topLeftToBottomRight.push(cells[i]);
+            }
+    
+            for (let i = boardSize - 1; i < cells.length - 1; i += boardSize - 1) {
+                topRightToBottomLeft.push(cells[i]);
+            }
+    
+            diagonals.push(topLeftToBottomRight, topRightToBottomLeft);
+    
+            return diagonals;
+        }
+    
+        function checkDrawCondition() {
+            return Array.from(cells).every(cell => {
+                return cell.textContent !== '';
+            });
+        }
+        function makeBotMove() {
+        const emptyCells = Array.from(cells).filter(cell => cell.textContent === '');
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        emptyCells[randomIndex].textContent = currentPlayer;
+
+        if (checkWinCondition(currentPlayer)) {
+            alert(`Player ${currentPlayer} wins!`);
+            gameEnded = true;
+        } else if (checkDrawCondition()) {
+            alert("It's a draw!");
+            gameEnded = true;
+        }
+
+        currentPlayer = 'X';
+    }
+}
+    </script>
+    
+    
+</body>
+</html>

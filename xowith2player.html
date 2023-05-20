@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 2px;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            margin-top: 10%;
+        }
+
+        .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        .cell:hover {
+            background-color: #ddd;
+        }
+        .reset-button {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #ccc;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="board">
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+    </div>
+
+    <div class="reset-button" onclick="resetBoard()">Reset Board</div>
+
+    <script>
+        const cells = document.querySelectorAll('.cell');
+        const boardSize = 5;
+        const winCondition = 4;
+        let currentPlayer = 'X';
+        let gameEnded = false;
+    
+        cells.forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
+    
+        function handleCellClick() {
+            if (gameEnded || this.textContent !== '') return;
+    
+            this.textContent = currentPlayer;
+    
+            if (checkWinCondition(currentPlayer)) {
+                alert(`Player ${currentPlayer} wins!`);
+                gameEnded = true;
+            } else if (checkDrawCondition()) {
+                alert("It's a draw!");
+                gameEnded = true;
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+    
+        function checkWinCondition(player) {
+            // Check rows
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col <= boardSize - winCondition; col++) {
+                    let hasWin = true;
+                    for (let i = 0; i < winCondition; i++) {
+                        const cellIndex = row * boardSize + col + i;
+                        if (cells[cellIndex].textContent !== player) {
+                            hasWin = false;
+                            break;
+                        }
+                    }
+                    if (hasWin) return true;
+                }
+            }
+    
+            // Check columns
+            for (let col = 0; col < boardSize; col++) {
+                for (let row = 0; row <= boardSize - winCondition; row++) {
+                    let hasWin = true;
+                    for (let i = 0; i < winCondition; i++) {
+                        const cellIndex = (row + i) * boardSize + col;
+                        if (cells[cellIndex].textContent !== player) {
+                            hasWin = false;
+                            break;
+                        }
+                    }
+                    if (hasWin) return true;
+                }
+            }
+    
+            // Check diagonals (top-left to bottom-right)
+            for (let row = 0; row <= boardSize - winCondition; row++) {
+                for (let col = 0; col <= boardSize - winCondition; col++) {
+                    let hasWin = true;
+                    for (let i = 0; i < winCondition; i++) {
+                        const cellIndex = (row + i) * boardSize + (col + i);
+                        if (cells[cellIndex].textContent !== player) {
+                            hasWin = false;
+                            break;
+                        }
+                    }
+                    if (hasWin) return true;
+                }
+            }
+    
+            // Check diagonals (top-right to bottom-left)
+            for (let row = 0; row <= boardSize - winCondition; row++) {
+                for (let col = winCondition - 1; col < boardSize; col++) {
+                    let hasWin = true;
+                    for (let i = 0; i < winCondition; i++) {
+                        const cellIndex = (row + i) * boardSize + (col - i);
+                        if (cells[cellIndex].textContent !== player) {
+                            hasWin = false;
+                            break;
+                        }
+                    }
+                    if (hasWin) return true;
+                }
+            }
+    
+            return false;
+        }
+    
+        function checkDrawCondition() {
+            return Array.from(cells).every(cell => {
+                return cell.textContent !== '';
+            });
+        }
+        function resetBoard() {
+            cells.forEach(cell => {
+                cell.textContent = '';
+            });
+        
+            currentPlayer = 'X';
+            gameEnded = false;
+        }
+        
+    </script>
+    
+    
+    
+    
+    
+</body>
+</html>

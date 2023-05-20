@@ -68,27 +68,30 @@
     </div>
 
     <div class="reset-button" onclick="resetBoard()">Reset Board</div>
-
     <script>
-        function resetBoard() {
-            cells.forEach(cell => {
-                cell.textContent = '';
-            });
-
-            currentPlayer = 'X';
-            gameEnded = false;
-        }
         const cells = document.querySelectorAll('.cell');
         const boardSize = 5; // Adjust the board size here
         const winCondition = 4; // Adjust the required number of connected symbols to win
         let currentPlayer = 'X';
         let gameEnded = false;
-    
-        cells.forEach(cell => {
-            cell.addEventListener('click', handleCellClick);
+
+
+        function resetBoard() {
+            cells.forEach(cell => {
+                cell.textContent = '';
+            });
+        
+            currentPlayer = 'X';
+            gameEnded = false;
+        }
+        
+
+        cells.forEach(cell => {        
+                     cell.addEventListener('click', handleCellClickBot);           
         });
     
-        function handleCellClick() {
+        
+function handleCellClickBot() {
             if (gameEnded || this.textContent !== '') return;
     
             this.textContent = currentPlayer;
